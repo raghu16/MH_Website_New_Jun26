@@ -41,6 +41,24 @@ npm run dev                   # dashboard → http://localhost:5173
 
 Open http://localhost:5173 and sign in with your `ADMIN_EMAIL` / `ADMIN_PASSWORD`.
 
+> **Port note:** the default API port is `4000`. If it's taken, set `PORT` (e.g. `4100`)
+> in `admin-backend/.env` **and** `VITE_API_URL` in `admin-frontend/.env` to match.
+
+## Seed the existing website content
+
+The site's blog, portfolio and white papers can be imported into the admin **through the
+API** (idempotent — clears each collection, then re-posts):
+
+```bash
+# from the repo root, with the backend running
+node admin/import-content.mjs
+```
+
+It reads `lib/posts.ts`, `lib/work.ts` and `lib/whitepapers.ts`, logs in, and POSTs everything
+(6 posts · 16 projects · 4 white papers). Override targets with `ADMIN_API`, `ADMIN_EMAIL`,
+`ADMIN_PASSWORD` env vars. (Services / solutions / industries are not managed in the admin yet —
+they live in `lib/*.ts`.)
+
 ## Data model (matches the marketing site)
 The DB shapes mirror the site's content files so the site can later read from the
 API instead of the static `lib/*.ts`:

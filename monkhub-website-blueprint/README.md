@@ -11,6 +11,28 @@ architecture, new design language, and **paste-ready copy** — engineered so th
 
 ---
 
+## ✅ Status: BUILT & DEPLOYED
+
+These documents are the **original strategy & research (pre-build)** — kept for the rationale.
+The site has since been **built and shipped**:
+
+- **Live:** https://monkhub-website.vercel.app · **Repo:** https://github.com/raghu16/MH_Website_New_Jun26
+- Two codebases: **dark theme** (root) and **light theme** (`../monkhub-website-light`).
+- A standalone **admin panel** (`admin/`, Express + PostgreSQL + React) for content management.
+- See the root [`README.md`](../README.md) for the current architecture and run/deploy steps.
+
+**Key deviations from this plan (the build evolved):**
+- The "Web Application Development" service became **Web3 Development**; services total **9**
+  (AI Agent Dev, Voice AI, Geospatial, AI Solutions, Mobile, Web3, XR, Game, 3D Art).
+- The "interactive globe" / chat consultant became a **full-page voice + 3D-avatar requirement-
+  gathering flow** at `/consultant` (simulated front-end).
+- Hyperspeed is the **real ReactBits Three.js** component (not the lightweight stand-in).
+- Added: **Solutions** (8) and **Industries** (4) detail-page trees, **Resources** (blog + white
+  papers), 16 **case studies** with image/video support, and per-card/hover animations across hubs.
+- Content lives in `lib/*.ts` (+ `lib/pageExtras.ts`); not yet wired to the admin API.
+
+---
+
 ## Why the current site underperforms (from the page-by-page audit)
 
 - Generic, undifferentiated "service-name-swapped" boilerplate across 12 service pages.
