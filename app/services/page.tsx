@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { services } from "@/lib/services";
+import { animOf } from "@/lib/anim";
+import SectionCanvas from "@/components/SectionCanvas";
 import ProcessBand from "@/components/ProcessBand";
 import Testimonials from "@/components/Testimonials";
 
@@ -36,15 +38,25 @@ export default function ServicesHub() {
               {services
                 .filter((s) => s.group === g)
                 .map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}`} className={`card flex flex-col ${s.flag ? "ring-1 ring-accent/40" : ""}`}>
-                    {s.flag && (
-                      <span className="mb-3 w-fit rounded-full border border-accent/40 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-accent">
-                        Flagship
-                      </span>
-                    )}
-                    <h3 className="text-xl font-medium">{s.eyebrow}</h3>
-                    <p className="mt-2 flex-1 text-sm text-muted">{s.subhead}</p>
-                    <span className="mt-4 font-mono text-xs text-accent">Explore →</span>
+                  <Link
+                    key={s.slug}
+                    href={`/services/${s.slug}`}
+                    className={`hover-glow group flex flex-col overflow-hidden rounded-2xl border bg-ink-900/60 hover:-translate-y-1 ${s.flag ? "border-accent/40" : "border-ink-700 hover:border-accent/50"}`}
+                  >
+                    <div className="relative h-24 overflow-hidden border-b border-ink-700 bg-ink-950">
+                      <SectionCanvas variant={animOf(s.slug)} hover className="absolute inset-0 h-full w-full opacity-80 transition-transform duration-500 group-hover:scale-105" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-ink-900 via-ink-900/30 to-transparent" />
+                      {s.flag && (
+                        <span className="absolute left-3 top-3 rounded-full border border-accent/40 bg-ink-950/70 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-accent backdrop-blur">
+                          Flagship
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex flex-1 flex-col p-6">
+                      <h3 className="text-xl font-medium">{s.eyebrow}</h3>
+                      <p className="mt-2 flex-1 text-sm text-muted">{s.subhead}</p>
+                      <span className="mt-4 font-mono text-xs text-accent opacity-0 transition-opacity group-hover:opacity-100">Explore →</span>
+                    </div>
                   </Link>
                 ))}
             </div>

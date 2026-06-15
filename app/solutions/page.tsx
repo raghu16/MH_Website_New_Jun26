@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { solutions } from "@/lib/solutions";
 import { site } from "@/lib/site";
+import { animOf } from "@/lib/anim";
 import SectionCanvas from "@/components/SectionCanvas";
 import ProcessBand from "@/components/ProcessBand";
 
@@ -49,28 +50,31 @@ export default function SolutionsPage() {
             {solutions.map((s) => {
               const t =
                 s.accent === "cyan"
-                  ? { text: "text-cyan", border: "border-cyan/40", grad: "from-cyan/25 via-cyan/5 to-transparent" }
-                  : { text: "text-accent", border: "border-accent/40", grad: "from-accent/25 via-accent/5 to-transparent" };
+                  ? { text: "text-cyan", border: "border-cyan/40" }
+                  : { text: "text-accent", border: "border-accent/40" };
               return (
-                <article
+                <Link
                   key={s.slug}
                   id={s.slug}
-                  className="reg relative scroll-mt-24 overflow-hidden rounded-3xl border border-ink-700 bg-ink-900/50 p-8 md:p-10"
+                  href={`/solutions/${s.slug}`}
+                  className="hover-glow group flex scroll-mt-24 flex-col overflow-hidden rounded-3xl border border-ink-700 bg-ink-900/60 hover:-translate-y-1 hover:border-accent/50"
                 >
-                  <div className={`pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-gradient-to-br ${t.grad} blur-2xl`} />
-                  <div className="relative flex items-center justify-between gap-3">
-                    <span className="mono-label">{s.category}</span>
-                    <span className={`shrink-0 rounded-full border px-3 py-1 font-mono text-[10px] uppercase tracking-widest ${t.border} ${t.text}`}>
+                  {/* hover-animated visual band */}
+                  <div className="relative h-36 overflow-hidden border-b border-ink-700 bg-ink-950">
+                    <SectionCanvas variant={animOf(s.slug)} hover className="absolute inset-0 h-full w-full opacity-80 transition-transform duration-500 group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink-900 via-ink-900/20 to-transparent" />
+                    <span className={`absolute right-4 top-4 rounded-full border bg-ink-950/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest backdrop-blur ${t.border} ${t.text}`}>
                       {s.tag}
                     </span>
                   </div>
-                  <h2 className="relative mt-5 font-serif text-3xl md:text-4xl">{s.name}</h2>
-                  <p className={`relative mt-2 font-serif text-lg italic ${t.text}`}>{s.blurb}</p>
-                  <p className="relative mt-5 max-w-md text-muted">{s.detail}</p>
-                  <Link href={`/solutions/${s.slug}`} className={`relative mt-7 inline-block font-mono text-xs uppercase tracking-widest ${t.text} hover:underline`}>
-                    Explore solution →
-                  </Link>
-                </article>
+                  <div className="flex flex-1 flex-col p-8 md:p-10">
+                    <span className="mono-label">{s.category}</span>
+                    <h2 className="mt-3 font-serif text-3xl md:text-4xl">{s.name}</h2>
+                    <p className={`mt-2 font-serif text-lg italic ${t.text}`}>{s.blurb}</p>
+                    <p className="mt-5 flex-1 text-muted">{s.detail}</p>
+                    <span className={`mt-7 font-mono text-xs uppercase tracking-widest ${t.text}`}>Explore solution →</span>
+                  </div>
+                </Link>
               );
             })}
           </div>

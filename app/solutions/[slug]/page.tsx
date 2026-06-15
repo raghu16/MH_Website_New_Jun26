@@ -2,11 +2,19 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { solutions, getSolution } from "@/lib/solutions";
+import { solutionExtras } from "@/lib/pageExtras";
 import { animOf } from "@/lib/anim";
 import { site } from "@/lib/site";
 import SectionCanvas from "@/components/SectionCanvas";
 import LeadCTA from "@/components/LeadCTA";
 import ProcessBand from "@/components/ProcessBand";
+import StatBand from "@/components/StatBand";
+import FeatureGrid from "@/components/FeatureGrid";
+import TechMarquee from "@/components/TechMarquee";
+import FeaturedCaseStudy from "@/components/FeaturedCaseStudy";
+import FaqAccordion from "@/components/FaqAccordion";
+import Reveal from "@/components/Reveal";
+import ConsultantButton from "@/components/ConsultantButton";
 
 const deploySteps = [
   { n: "01", t: "Scope", d: "We map your use case and data, and confirm fit in a short discovery call." },
@@ -36,11 +44,13 @@ export default async function SolutionDetail({ params }: { params: Promise<{ slu
   const s = getSolution(slug);
   if (!s) notFound();
 
-  const t =
-    s.accent === "cyan"
-      ? { text: "text-cyan", border: "border-cyan/40", dot: "bg-cyan" }
-      : { text: "text-accent", border: "border-accent/40", dot: "bg-accent" };
-  const related = solutions.filter((x) => x.slug !== s.slug).slice(0, 3);
+  const x = solutionExtras[s.slug];
+  const t = s.accent === "cyan"
+    ? { text: "text-cyan", border: "border-cyan/40", dot: "bg-cyan" }
+    : { text: "text-accent", border: "border-accent/40", dot: "bg-accent" };
+  const accent = s.accent === "cyan" ? "cyan" : "magenta";
+  const features = x?.features ?? s.features.map((f) => ({ t: f, d: "" }));
+  const related = solutions.filter((r) => r.slug !== s.slug).slice(0, 3);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -54,7 +64,7 @@ export default async function SolutionDetail({ params }: { params: Promise<{ slu
 
   return (
     <>
-      {/* hero with context animation */}
+      {/* hero */}
       <section className="relative isolate overflow-hidden border-b border-ink-700">
         <div className="absolute inset-0 opacity-70">
           <SectionCanvas variant={animOf(s.slug)} />
@@ -80,23 +90,22 @@ export default async function SolutionDetail({ params }: { params: Promise<{ slu
         </div>
       </section>
 
-      {/* what's inside + outcomes */}
+      <StatBand stats={x?.stats} />
+
+      {/* what's inside */}
       <section className="grid-texture border-b border-ink-700">
-        <div className="container-page grid gap-12 py-20 md:grid-cols-[1.4fr_1fr]">
-          <div>
-            <p className="eyebrow">What&apos;s inside</p>
-            <ul className="mt-8 space-y-4">
-              {s.features.map((f) => (
-                <li key={f} className="flex items-start gap-3 text-paper/90">
-                  <span className={`mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full ${t.dot}`} />
-                  {f}
-                </li>
-              ))}
-            </ul>
-          </div>
+        <div className="container-page py-20">
+          <p className="eyebrow">What&apos;s inside</p>
+          <Reveal className="mt-10"><FeatureGrid items={features} accent={accent} /></Reveal>
+        </div>
+      </section>
+
+      {/* outcomes + best for */}
+      <section className="border-b border-ink-700">
+        <div className="container-page grid gap-12 py-20 md:grid-cols-[1.2fr_1fr]">
           <div>
             <p className="eyebrow">Outcomes</p>
-            <div className="mt-8 grid grid-cols-2 gap-4">
+            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
               {s.outcomes.map((o) => (
                 <div key={o.l} className="card">
                   <div className="font-serif text-3xl text-paper">{o.v}</div>
@@ -104,16 +113,85 @@ export default async function SolutionDetail({ params }: { params: Promise<{ slu
                 </div>
               ))}
             </div>
-            <div className="card mt-4">
-              <div className="mono-label text-accent">Best for</div>
-              <p className="mt-2 text-sm text-paper/90">{s.bestFor}</p>
-            </div>
+          </div>
+          <div className="card">
+            <div className="mono-label text-accent">Best for</div>
+            <p className="mt-2 text-paper/90">{s.bestFor}</p>
           </div>
         </div>
       </section>
 
       {/* how it works */}
       <ProcessBand eyebrow="How it works" title={`${s.name}, live in weeks.`} steps={deploySteps} />
+
+      {/* integrations */}
+      <TechMarquee items={x?.integrations} label="Integrates with" />
+
+      {/* use cases */}
+      {x?.useCases?.length ? (
+        <section className="border-b border-ink-700">
+          <div className="container-page py-20">
+            <p className="eyebrow">Where it fits</p>
+            <Reveal className="mt-10 grid gap-5 md:grid-cols-3">
+              {x.useCases.map((u) => (
+                <div key={u.t} className="card">
+                  <h3 className="text-lg font-medium">{u.t}</h3>
+                  <p className="mt-2 text-sm text-muted">{u.d}</p>
+                </div>
+              ))}
+            </Reveal>
+          </div>
+        </section>
+      ) : null}
+
+      <FeaturedCaseStudy slug={x?.caseStudy} category={s.category} />
+
+      {/* deploy & pricing */}
+      <section className="grid-texture border-b border-ink-700">
+        <div className="container-page grid gap-12 py-20 md:grid-cols-2">
+          <div>
+            <p className="eyebrow">Deploy &amp; pricing</p>
+            <h2 className="mt-4 font-serif text-3xl md:text-4xl">{x?.timeline ?? "Live in weeks"}.</h2>
+            <p className="mt-4 max-w-md text-muted">
+              Fixed-price deployment, configured to your data and stack. No hourly meter — you know the
+              number before we start, and you own everything we ship.
+            </p>
+            <Link href="/contact-us" className="btn-primary mt-7">Get a fixed-price plan →</Link>
+          </div>
+          <div>
+            <p className="eyebrow">What&apos;s included</p>
+            <ul className="mt-8 space-y-4">
+              {(x?.includes ?? []).map((i) => (
+                <li key={i} className="flex items-start gap-3 text-paper/90">
+                  <span className={`mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full ${t.dot}`} />
+                  {i}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* interactive demo */}
+      <section className="relative isolate overflow-hidden border-b border-ink-700">
+        <div className="absolute inset-0 opacity-50">
+          <SectionCanvas variant={animOf(s.slug)} />
+        </div>
+        <div className="hero-scrim absolute inset-0" />
+        <div className="container-page relative py-20 text-center">
+          <p className="eyebrow">See it live</p>
+          <h2 className="mx-auto mt-4 max-w-2xl font-serif text-3xl md:text-4xl">Want to see {s.name} in action?</h2>
+          <p className="mx-auto mt-4 max-w-lg text-muted">
+            Talk to our AI consultant for an instant walkthrough and a same-day plan — or book a live demo with an engineer.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <ConsultantButton className="btn-primary">Try the AI consultant →</ConsultantButton>
+            <Link href="/contact-us" className="btn-ghost">Book a live demo</Link>
+          </div>
+        </div>
+      </section>
+
+      <FaqAccordion faqs={x?.faq} />
 
       {/* related */}
       <section className="border-b border-ink-700">
@@ -128,6 +206,9 @@ export default async function SolutionDetail({ params }: { params: Promise<{ slu
               </Link>
             ))}
           </div>
+          <Link href="/services" className="mt-8 inline-block font-mono text-xs uppercase tracking-widest text-cyan hover:underline">
+            Need something custom-built? See Services →
+          </Link>
         </div>
       </section>
 
