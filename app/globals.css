@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    --grid: rgba(245, 245, 244, 0.04);
+
+    /* ─────────────────────────────────────────────────────────────
+       BRAND COLORS — change these in ONE place to retheme the site.
+       Values are space-separated RGB (so Tailwind opacity + canvas both work).
+       ───────────────────────────────────────────────────────────── */
+    --accent-rgb: 193 106 154;       /* primary "pink" — subtle dusty rose (was bright 216 86 191) */
+    --accent-soft-rgb: 216 152 180;  /* lighter pink (hovers) */
+    --accent-dim-rgb: 166 90 130;    /* darker pink */
+
+    --cyan-rgb: 3 179 195;           /* secondary accent */
+    --cyan-soft-rgb: 34 211 238;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: 5rem; /* offset hash-anchor targets below the sticky header */
+  }
+  /* smooth scroll only when the user hasn't asked for reduced motion */
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+
+  /* always-visible keyboard focus ring */
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent-rgb));
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  body {
+    @apply bg-ink-950 text-paper font-sans antialiased;
+    /* faint engineering-blueprint grid across the whole site */
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  ::selection {
+    background: rgb(var(--accent-rgb));
+    color: #050507;
+  }
+
+  /* Fraunces display tuning — optical sizing on, a touch more weight & tighter
+     tracking so headlines read confident and crafted, not thin/generic. */
+  .font-serif {
+    font-optical-sizing: auto;
+    font-weight: 480;
+    letter-spacing: -0.015em;
+  }
+  .font-serif.italic,
+  .italic.font-serif {
+    font-weight: 460;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+    .marquee__track { animation: none !important; }
+  }
+}
+
+@layer components {
+  .container-page { @apply mx-auto w-full max-w-page px-6 md:px-10; }
+
+  /* ── system typography ── */
+  .mono-label { @apply font-mono text-[11px] uppercase tracking-[0.25em] text-muted; }
+  .sig { @apply font-mono text-[11px] uppercase tracking-[0.25em] text-accent; }
+
+  /* section header: §0X / TITLE ——————————— */
+  .sec-num { @apply font-mono text-[11px] tracking-[0.25em] text-accent; }
+
+  /* outlined display text (engineering-drawing feel) */
+  .stroke-text {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(245, 245, 244, 0.45);
+  }
+
+  /* live status dot */
+  .live-dot {
+    @apply inline-block h-2 w-2 rounded-full bg-accent;
+    box-shadow: 0 0 0 0 rgb(var(--accent-rgb) / 0.7);
+    animation: pulse 2.4s infinite;
+  }
+  .glow-accent { box-shadow: 0 0 12px 2px rgb(var(--accent-rgb) / 0.7); }
+  .hover-glow { transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s; }
+  .hover-glow:hover { box-shadow: 0 0 44px -12px rgb(var(--accent-rgb) / 0.55); }
+
+  /* buttons */
+  .btn { @apply inline-flex items-center justify-center gap-2 text-sm font-medium transition-all duration-200; }
+  .btn-primary { @apply btn rounded-full bg-accent px-6 py-3 text-ink-950; }
+  .btn-primary:hover { background: rgb(var(--accent-soft-rgb)); box-shadow: 0 0 36px -6px rgb(var(--accent-rgb) / 0.7); }
+  .btn-ghost { @apply btn rounded-full border border-ink-700 px-6 py-3 text-paper hover:border-accent hover:text-accent; }
+
+  /* corner registration marks for framed blocks */
+  .reg::before, .reg::after {
+    content: "";
+    position: absolute;
+    width: 12px; height: 12px;
+    border-color: rgb(var(--accent-rgb) / 0.6);
+  }
+  .reg { border-color: rgb(var(--accent-rgb) / 0.6); }
+  .reg::before { top: -1px; left: -1px; border-top: 1px solid; border-left: 1px solid; }
+  .reg::after { bottom: -1px; right: -1px; border-bottom: 1px solid; border-right: 1px solid; }
+
+  /* marquee */
+  .marquee { @apply flex overflow-hidden whitespace-nowrap; }
+  .marquee__track { display: flex; flex-shrink: 0; gap: 3rem; padding-right: 3rem; animation: scroll-x 40s linear infinite; }
+  .marquee:hover .marquee__track { animation-play-state: paused; }
+
+  /* scroll reveal */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+  .reveal.in { opacity: 1; transform: none; }
+}
+
+@layer utilities {
+  .hero-scrim {
+    background: radial-gradient(135% 100% at 50% 0%,
+      rgba(10,10,11,0.05) 0%, rgba(10,10,11,0.55) 50%, rgba(10,10,11,0.92) 100%);
+  }
+  .blueprint-dense {
+    background-image:
+      linear-gradient(to right, rgba(245,245,244,0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(245,245,244,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}
+
+/* ── compatibility: classes the current pages still use (kept working
+   while the full "Monkhub OS" revamp lands section by section) ── */
+@layer components {
+  .eyebrow { @apply font-mono text-xs uppercase tracking-[0.2em] text-accent; }
+  .card { @apply rounded-2xl border border-ink-700 bg-ink-900/60 p-6 transition-colors duration-200 hover:border-ink-600; }
+  .grid-texture {
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+}
+@keyframes fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.animate-fade-up { animation: fade-up 0.7s cubic-bezier(0.16,1,0.3,1) both; }
+
+@keyframes scroll-x { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgb(var(--accent-rgb) / 0.6); }
+  70% { box-shadow: 0 0 0 8px rgb(var(--accent-rgb) / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(var(--accent-rgb) / 0); }
+}
+@keyframes blur-in {
+  from { opacity: 0; filter: blur(14px); transform: translateY(10px); }
+  to { opacity: 1; filter: blur(0); transform: none; }
+}
+.animate-blur-in { animation: blur-in 1s cubic-bezier(0.16,1,0.3,1) both; }
+
+/* ── route transition (navigation micro-interaction) — CSS only, ~460ms ── */
+.route-overlay {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  background: rgb(5 5 7 / 0.92);
+  pointer-events: none;
+  animation: route-fade 0.46s ease forwards;
+}
+.route-loader { position: relative; display: flex; align-items: center; justify-content: center; width: 54px; height: 54px; }
+.route-ring {
+  position: absolute; inset: 0; border-radius: 9999px;
+  border: 2px solid transparent;
+  border-top-color: rgb(var(--accent-rgb));
+  border-right-color: rgb(var(--cyan-rgb));
+  animation: route-spin 0.65s linear infinite;
+}
+.route-mark { font-family: var(--font-mono); font-weight: 700; color: rgb(var(--accent-rgb)); animation: route-pop 0.46s cubic-bezier(0.16,1,0.3,1); }
+@keyframes route-fade { 0% { opacity: 0; } 20% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes route-spin { to { transform: rotate(360deg); } }
+@keyframes route-pop { 0% { transform: scale(0.3); opacity: 0; } 45% { transform: scale(1); opacity: 1; } }
