@@ -35,24 +35,34 @@ export default function Industries() {
             {industries.map((ind) => {
               const t =
                 ind.accent === "cyan"
-                  ? { text: "text-cyan", grad: "from-cyan/25 via-cyan/5 to-transparent", dot: "bg-cyan" }
-                  : { text: "text-accent", grad: "from-accent/25 via-accent/5 to-transparent", dot: "bg-accent" };
+                  ? { text: "text-cyan", dot: "bg-cyan" }
+                  : { text: "text-accent", dot: "bg-accent" };
               return (
-                <Link key={ind.slug} href={`/industries/${ind.slug}`} className="reg group relative overflow-hidden rounded-3xl border border-ink-700 bg-ink-900/50 p-8 transition-colors hover:border-ink-600 md:p-10">
-                  <div className={`pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br ${t.grad} blur-2xl`} />
-                  <h2 className="relative font-serif text-3xl md:text-4xl">{ind.name}</h2>
-                  <p className={`relative mt-2 font-serif text-lg italic ${t.text}`}>{ind.blurb}</p>
-                  <ul className="relative mt-6 space-y-3">
-                    {ind.points.slice(0, 3).map((p) => (
-                      <li key={p} className="flex items-start gap-3 text-sm text-paper/90">
-                        <span className={`mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full ${t.dot}`} />
-                        {p}
-                      </li>
-                    ))}
-                  </ul>
-                  <span className={`relative mt-7 inline-block font-mono text-xs uppercase tracking-widest ${t.text} opacity-0 transition-opacity group-hover:opacity-100`}>
-                    Explore {ind.name} →
-                  </span>
+                <Link
+                  key={ind.slug}
+                  href={`/industries/${ind.slug}`}
+                  className="hover-glow group flex flex-col overflow-hidden rounded-3xl border border-ink-700 bg-ink-900/60 hover:-translate-y-1 hover:border-accent/50"
+                >
+                  {/* hover-animated visual band */}
+                  <div className="relative h-40 overflow-hidden border-b border-ink-700 bg-ink-950">
+                    <SectionCanvas variant={animOf(ind.slug)} hover className="absolute inset-0 h-full w-full opacity-80 transition-transform duration-500 group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink-900 via-ink-900/20 to-transparent" />
+                  </div>
+                  <div className="flex flex-1 flex-col p-8 md:p-10">
+                    <h2 className="font-serif text-3xl md:text-4xl">{ind.name}</h2>
+                    <p className={`mt-2 font-serif text-lg italic ${t.text}`}>{ind.blurb}</p>
+                    <ul className="mt-6 space-y-3">
+                      {ind.points.slice(0, 3).map((p) => (
+                        <li key={p} className="flex items-start gap-3 text-sm text-paper/90">
+                          <span className={`mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full ${t.dot}`} />
+                          {p}
+                        </li>
+                      ))}
+                    </ul>
+                    <span className={`mt-7 inline-block font-mono text-xs uppercase tracking-widest ${t.text} opacity-0 transition-opacity group-hover:opacity-100`}>
+                      Explore {ind.name} →
+                    </span>
+                  </div>
                 </Link>
               );
             })}

@@ -335,3 +335,103 @@ export const solutionExtras: Record<string, SolutionExtra> = {
     caseStudy: "consumer-indexing",
   },
 };
+
+/* ─────────────────────────── INDUSTRIES ─────────────────────────── */
+export type IndustryExtra = {
+  challenge: string;
+  stats: Stat[];
+  capabilities: Feature[];
+  faq: QA[];
+  caseStudy?: string;
+};
+
+export const industryExtras: Record<string, IndustryExtra> = {
+  "power-sector": {
+    challenge:
+      "Power infrastructure is vast, remote and high-stakes — and the cost of a missed fault or an undertrained crew is measured in outages and safety incidents. Manual inspection can't keep up with the network, and field training is slow, expensive and risky to run on live equipment.",
+    stats: [
+      { v: "early", l: "fault detection" },
+      { v: "4×", l: "faster training" },
+      { v: "satellite", l: "+ drone monitoring" },
+      { v: "24/7", l: "ops automation" },
+    ],
+    capabilities: [
+      { t: "Satellite & drone monitoring", d: "Detect line faults, encroachment and vegetation risk across the network automatically." },
+      { t: "VR safety & field training", d: "Rehearse high-stakes procedures with zero real-world risk — and measure competency." },
+      { t: "AI operations agents", d: "Outage triage, maintenance scheduling and back-office automation." },
+      { t: "Network digital twins", d: "A living geospatial model of your grid and assets." },
+    ],
+    faq: [
+      { q: "How do you monitor infrastructure at scale?", a: "GeoAI on satellite and drone imagery detects change, encroachment and damage automatically, with alerts on what needs attention." },
+      { q: "Is VR training actually effective for field work?", a: "Yes — trainees reach competency up to 4× faster and report far higher confidence, with outcomes you can measure." },
+      { q: "Can you work with our existing systems?", a: "Yes — we integrate with your GIS, asset systems and field workflows." },
+    ],
+    caseStudy: "enetra",
+  },
+  "real-estate": {
+    challenge:
+      "Property is sold on experience and speed — but buyers can't always visit, leads go cold after hours, and brokers run on fragmented tools. The teams that win show the space immersively, qualify buyers instantly, and never miss a lead.",
+    stats: [
+      { v: "remote", l: "viewings" },
+      { v: "24/7", l: "buyer assist" },
+      { v: "white-label", l: "platform" },
+      { v: "faster", l: "pre-sales" },
+    ],
+    capabilities: [
+      { t: "VR property demos", d: "Photoreal walkthroughs of units and developments — sell off-plan, remotely." },
+      { t: "Broker platform", d: "White-label listings, leads, CRM and AI assist in one place." },
+      { t: "AI voice & chat agents", d: "Qualify buyers and book viewings 24/7." },
+      { t: "Geospatial site analysis", d: "Satellite intelligence for land, site and portfolio decisions." },
+    ],
+    faq: [
+      { q: "Do buyers need a VR headset?", a: "No — we deliver web and mobile-AR walkthroughs alongside headset experiences." },
+      { q: "Is the broker platform white-label?", a: "Yes — your brand, your domain, with multi-agent support and a built-in CRM." },
+      { q: "Can the AI assistant handle real enquiries?", a: "Yes — it qualifies buyers, answers property questions and books viewings around the clock." },
+    ],
+    caseStudy: "solar-place",
+  },
+  "education": {
+    challenge:
+      "Learning sticks when it's adaptive and engaging — but most content is static and one-size-fits-all, and the hardest skills can't be taught on paper. The institutions and edtechs that grow make learning personal, gamified and immersive.",
+    stats: [
+      { v: "adaptive", l: "learning" },
+      { v: "higher", l: "engagement" },
+      { v: "VR", l: "simulations" },
+      { v: "grounded", l: "AI tutors" },
+    ],
+    capabilities: [
+      { t: "AI tutors & assistants", d: "Grounded in your curriculum — accurate, cited and available 24/7." },
+      { t: "Gamified adaptive learning", d: "Experiences that adapt to each learner (à la Super Neuron)." },
+      { t: "VR training simulations", d: "Hands-on skills practiced safely and measurably." },
+      { t: "Content intelligence", d: "Build and structure courses faster from your material." },
+    ],
+    faq: [
+      { q: "How do AI tutors avoid wrong answers?", a: "They're retrieval-grounded in your curriculum and cite sources — they answer from your content, not guesswork." },
+      { q: "What ages or subjects does this suit?", a: "From K-12 to professional upskilling — adaptive difficulty and gamification work across levels." },
+      { q: "Can it integrate with our LMS?", a: "Yes — via SCORM / xAPI and SSO." },
+    ],
+    caseStudy: "super-neuron",
+  },
+  "e-commerce": {
+    challenge:
+      "In e-commerce, margin lives in conversion and support efficiency — but shoppers bounce without help, support costs scale with volume, and operations drown in manual work. The brands that win automate the busywork and assist every shopper.",
+    stats: [
+      { v: "higher", l: "conversion" },
+      { v: "lower", l: "support cost" },
+      { v: "24/7", l: "AI service" },
+      { v: "faster", l: "operations" },
+    ],
+    capabilities: [
+      { t: "AI shopping & support agents", d: "Deflect tickets and drive sales with assistants that know your catalog." },
+      { t: "Voice automation", d: "Orders, returns and 24/7 customer service by voice." },
+      { t: "Catalog & document intelligence", d: "Fast, accurate operations from your data." },
+      { t: "Custom storefronts", d: "Conversion-focused web apps and marketplaces." },
+    ],
+    faq: [
+      { q: "Will the AI agent know our products?", a: "Yes — it's grounded in your catalog and policies, with cited, accurate answers." },
+      { q: "How much support volume can it deflect?", a: "Typically a large share of Tier-1 queries, with clean escalation for the rest." },
+      { q: "Does it integrate with our store?", a: "Yes — Shopify, custom storefronts, helpdesks and your data." },
+    ],
+    caseStudy: "consumer-indexing",
+  },
+};
