@@ -1,0 +1,4 @@
+# Only the Next.js marketing site is deployed to Vercel.
+# The admin panel (Express + Postgres) and strategy docs are not part of this build.
+admin
+monkhub-website-blueprint
